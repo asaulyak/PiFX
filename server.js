@@ -43,19 +43,20 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('animations', function (activeAnimations) {
-		ActiveAnimations = []
+		ActiveAnimations = [];
 		for (var i = 0; i < activeAnimations.length; i++) {
 			for (var a = 0; a < Animations.length; a++) {
 				if (activeAnimations[i].name == Animations[a].name) {
-					var anim = new AvailableAnimations[a](PIXELS)
+					var anim = new AvailableAnimations[a](PIXELS);
 					anim.config = activeAnimations[i].config;
+					anim.id = activeAnimations[i].id;
 
-					ActiveAnimations.push(anim)
+					ActiveAnimations.push(anim);
 				}
 			}
 		}
 
-		socket.broadcast.emit('animations', activeAnimations)
+		socket.broadcast.emit('animations', activeAnimations);
 	});
 
 	socket.on('toggle', function () {
@@ -66,7 +67,7 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('updateAnimation', function (animation) {
 		for (var i = 0; i < ActiveAnimations.length; i++) {
-			if (animation.name === ActiveAnimations[i].name) {
+			if (animation.id === ActiveAnimations[i].id) {
 				ActiveAnimations[i].config = animation.config;
 			}
 		}

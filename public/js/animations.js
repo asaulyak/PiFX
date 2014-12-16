@@ -47,6 +47,7 @@ function bindEvents(){
 	$(document).on('click', 'button.btn.add[data-anim-index]', function(){
 		var index = $(this).data('anim-index');
 		var anim = $.extend(true, {}, ANIMATIONS[index]);
+		anim.id = index;
 
 		addAnimationPane(anim);
 
