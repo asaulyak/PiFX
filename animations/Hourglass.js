@@ -1,4 +1,6 @@
 function Hourglass() {
+	console.log('constructor');
+	console.trace();
 	this.name = 'Hourglass';
 
 	this._currentPosition = 0;
@@ -37,7 +39,7 @@ Hourglass.prototype.requestFrame = function (frame, pixelBuffer) {
 			this._bottom--;
 		}
 	}
-	console.log('position', this._currentPosition);
+	
 	pixelBuffer.blank();
 	pixelBuffer.fillRangeRGB(this._currentPosition, this._currentPosition + 1,
 		this.config.color.value.r,

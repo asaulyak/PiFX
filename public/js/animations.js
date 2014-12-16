@@ -25,6 +25,10 @@ function sync(render){
 		renderInterface();
 }
 
+function updateAnimation(animationIndex) {
+	socket.emit('updateAnimation', ACTIVE_ANIMATIONS[animationIndex]);
+}
+
 function renderInterface(){
 	$('table.availableAnimations tbody').empty();
 
@@ -59,7 +63,6 @@ function bindEvents(){
 		ACTIVE_ANIMATIONS.splice(animIndex, 1);
 
 		$(this).parents('div.active-animation').remove();
-
 		sync();
 	})
 	.on('change', 'div.active-animation input, div.active-animation select', function(e){
@@ -71,7 +74,7 @@ function bindEvents(){
 
 		ACTIVE_ANIMATIONS[animIndex].config[property].value = extractValues($(this).parents('div.config')[0]);
 
-		sync(false);
+			updateAnimation(animIndex);
 	});
 }
 

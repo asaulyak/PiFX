@@ -44,7 +44,6 @@ io.sockets.on('connection', function (socket) {
 
 	socket.on('animations', function (activeAnimations) {
 		ActiveAnimations = []
-
 		for (var i = 0; i < activeAnimations.length; i++) {
 			for (var a = 0; a < Animations.length; a++) {
 				if (activeAnimations[i].name == Animations[a].name) {
@@ -57,21 +56,29 @@ io.sockets.on('connection', function (socket) {
 		}
 
 		socket.broadcast.emit('animations', activeAnimations)
-	})
+	});
 
 	socket.on('toggle', function () {
 		RUNNING = !RUNNING
 
 		socket.broadcast.emit('status', RUNNING)
-	})
-})
+	});
+
+	socket.on('updateAnimation', function (animation) {
+		for (var i = 0; i < ActiveAnimations.length; i++) {
+			if (animation.name === ActiveAnimations[i].name) {
+				ActiveAnimations[i].config = animation.config;
+			}
+		}
+	});
+});
 
 
 function Strip(arr) {
 	var animations = JSON.stringify(arr.slice())
 	animations = JSON.parse(animations)
 
-	delete animations.frame
+	delete animations.frame;
 
 	return animations
 }
@@ -81,11 +88,10 @@ function RenderStrip() {
 		Pixels = ActiveAnimations[i].requestFrame(Frame, Pixels)
 	}
 
-	Device.transfer(Pixels.buffer, Pixels.readBuffer)
+	Device.transfer(Pixels.buffer, Pixels.readBuffer);
 
 	if (RUNNING) {
-		Frame++
-		console.log(Pixels.buffer);
-		setTimeout(RenderStrip, 1000 / FPS)
+		Frame++;
+		setTimeout(RenderStrip, 1000 / FPS);
 	}
 }
