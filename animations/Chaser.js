@@ -8,8 +8,8 @@ function Chaser() {
 		color: {
 			type: 'color',
 			value: {
-				r: 255,
-				g: 255,
+				r: 0,
+				g: 0,
 				b: 255
 			}
 		},

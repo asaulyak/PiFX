@@ -132,7 +132,7 @@ function extractValues(element) {
 		return tinycolor({
 			h: parseInt($(element).find('input.hue').val()),
 			s: 100,
-			l: 0.05
+			l: 0.1
 		}).toRgb();
 	} else if ($(element).data('type') === 'select') {
 		return $(element).find('select').val();
