@@ -1,27 +1,27 @@
-var ACTIVE_ANIMATIONS 	= [],
-	ANIMATIONS 				= [];
+var ACTIVE_ANIMATIONS = [],
+	ANIMATIONS = [];
 
 $(document).ready(bindEvents);
 
 var socket = io.connect('http://' + window.location.hostname);
 
-socket.on('initialize', function(data){
+socket.on('initialize', function (data) {
 	ACTIVE_ANIMATIONS = data.activeAnimations;
 	ANIMATIONS = data.animations;
 
 	renderInterface();
 });
 
-socket.on('animations', function(activeAnimations){
+socket.on('animations', function (activeAnimations) {
 	ACTIVE_ANIMATIONS = activeAnimations;
 
 	renderInterface();
 });
 
-function sync(render){
+function sync(render) {
 	socket.emit('animations', ACTIVE_ANIMATIONS);
 
-	if(render !== false)
+	if (render !== false)
 		renderInterface();
 }
 
@@ -29,25 +29,25 @@ function updateAnimation(animationIndex) {
 	socket.emit('updateAnimation', ACTIVE_ANIMATIONS[animationIndex]);
 }
 
-function renderInterface(){
+function renderInterface() {
 	$('table.availableAnimations tbody').empty();
 
-	for(var i = 0; i < ANIMATIONS.length; i++){
+	for (var i = 0; i < ANIMATIONS.length; i++) {
 		$('table.availableAnimations tbody').append($('<tr><td>' + ANIMATIONS[i].name + '</td><td><button class="btn btn-inverse add" data-anim-index="' + i + '">Add</button></td></tr>'));
 	}
 
 	$('div.row-fluid.animations div.span3').not('div.add-animation').remove();
 
-	for(var i = 0; i < ACTIVE_ANIMATIONS.length; i++){
+	for (var i = 0; i < ACTIVE_ANIMATIONS.length; i++) {
 		addAnimationPane(ACTIVE_ANIMATIONS[i]);
 	}
 }
 
-function bindEvents(){
-	$(document).on('click', 'button.btn.add[data-anim-index]', function(){
+function bindEvents() {
+	$(document).on('click', 'button.btn.add[data-anim-index]', function () {
 		var index = $(this).data('anim-index');
-		var anim = $.extend(true, {}, ANIMATIONS[index]);
-		anim.id = index;
+		var anim = $.extend(true, {id: index}, ANIMATIONS[index]);
+		//anim.id = index;
 
 		addAnimationPane(anim);
 
@@ -55,31 +55,31 @@ function bindEvents(){
 
 		sync();
 	})
-	.on('click', 'div.active-animation a.close', function(e){
-		e.stopPropagation();
-		e.preventDefault();
+		.on('click', 'div.active-animation a.close', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
 
-		var animIndex = $('div.active-animation').index($(this).parents('div.active-animation'));
+			var animIndex = $('div.active-animation').index($(this).parents('div.active-animation'));
 
-		ACTIVE_ANIMATIONS.splice(animIndex, 1);
+			ACTIVE_ANIMATIONS.splice(animIndex, 1);
 
-		$(this).parents('div.active-animation').remove();
-		sync();
-	})
-	.on('change', 'div.active-animation input, div.active-animation select', function(e){
-		e.stopPropagation();
-		e.preventDefault();
+			$(this).parents('div.active-animation').remove();
+			sync();
+		})
+		.on('change', 'div.active-animation input, div.active-animation select', function (e) {
+			e.stopPropagation();
+			e.preventDefault();
 
-		var animIndex = $('div.active-animation').index($(this).parents('div.active-animation'));
-		var property = $(this).parents('div.config').data('key');
+			var animIndex = $('div.active-animation').index($(this).parents('div.active-animation'));
+			var property = $(this).parents('div.config').data('key');
 
-		ACTIVE_ANIMATIONS[animIndex].config[property].value = extractValues($(this).parents('div.config')[0]);
+			ACTIVE_ANIMATIONS[animIndex].config[property].value = extractValues($(this).parents('div.config')[0]);
 
 			updateAnimation(animIndex);
-	});
+		});
 }
 
-function addAnimationPane(anim){
+function addAnimationPane(anim) {
 	var panel = $('<div class="panel span3 active-animation well"></div>');
 
 	var panelHeader = $('<div class="row-fluid"></div>');
@@ -90,8 +90,8 @@ function addAnimationPane(anim){
 
 	var panelBody = $('<div class="row-fluid"></div>');
 
-	for(var i in anim.config){
-		if(!anim.config.hasOwnProperty(i)){
+	for (var i in anim.config) {
+		if (!anim.config.hasOwnProperty(i)) {
 			continue;
 		}
 
@@ -99,14 +99,11 @@ function addAnimationPane(anim){
 
 		var configElement = null;
 
-		switch(config.type){
+		switch (config.type) {
 			case 'color':
 				configElement = Config[config.type](config);
 				configElement.find('input.hue').val(
 					tinycolor(config.value).toHsl().h
-				);
-				configElement.find('input.lightness').val(
-					tinycolor(config.value).toHsl().l
 				);
 				break;
 			case 'select':
@@ -129,16 +126,17 @@ function addAnimationPane(anim){
 	$('div.row-fluid.animations').append(panel);
 }
 
-function extractValues(element){
-	if($(element).data('type') == 'color'){
+function extractValues(element) {
+	// TODO: Consider using switch
+	if ($(element).data('type') === 'color') {
 		return tinycolor({
 			h: parseInt($(element).find('input.hue').val()),
 			s: 100,
-			l: parseFloat($(element).find('input.lightness').val())
+			l: 0.05
 		}).toRgb();
-	} else if($(element).data('type') == 'select'){
+	} else if ($(element).data('type') === 'select') {
 		return $(element).find('select').val();
-	} else if($(element).data('type') == 'range') {
+	} else if ($(element).data('type') === 'range') {
 		return $(element).find('input[type="range"]').val();
 	} else {
 		return null;
