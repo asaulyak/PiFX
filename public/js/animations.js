@@ -30,6 +30,7 @@ function updateAnimation(animationIndex) {
 }
 
 function renderInterface() {
+	return;
 	$('table.availableAnimations tbody').empty();
 
 	for (var i = 0; i < ANIMATIONS.length; i++) {

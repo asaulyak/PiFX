@@ -46,7 +46,7 @@ Chaser.prototype.requestFrame = function (frame, pixelBuffer) {
 		pixelBuffer.fillMapRGB(pixelsMap);
 	}
 
-	return pixelBuffer
+	return pixelBuffer;
 };
 
 module.exports = Chaser;

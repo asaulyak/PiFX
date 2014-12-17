@@ -1,6 +1,15 @@
 function AnimationViewModel() {
 	"use strict";
 
+	var socket = io.connect('http://' + window.location.hostname);
+
+	socket.on('initialize', function (data) {
+		//ACTIVE_ANIMATIONS = data.activeAnimations;
+		//ANIMATIONS = data.animations;
+		//
+		//renderInterface();
+	});
+
 	this.availableAnimations = {
 
 		// Properties
@@ -15,18 +24,14 @@ function AnimationViewModel() {
 
 		// Event Handlers
 		onAddAnimationClick: function (e) {
-
+			console.log(e);
 		}
 	};
 
 	this.currentAnimation = {
 
 		// Properties
-		config: {
-			name: '',
-
-		},
-
+		name: '',
 		controls: ko.observableArray([]),
 
 		// Methods
@@ -38,8 +43,7 @@ function AnimationViewModel() {
 				max: ko.observable(control.max),
 				step: ko.observable(control.step),
 				value: ko.observable(control.value),
-				choices: ko.observableArray(control.choices || []),
-
+				choices: ko.observableArray(control.choices || [])
 			});
 		},
 

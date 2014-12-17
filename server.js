@@ -46,7 +46,7 @@ io.sockets.on('connection', function (socket) {
 		ActiveAnimations = [];
 		for (var i = 0; i < activeAnimations.length; i++) {
 			for (var a = 0; a < Animations.length; a++) {
-				if (activeAnimations[i].name == Animations[a].name) {
+				if (activeAnimations[i].name === Animations[a].name) {
 					var anim = new AvailableAnimations[a](PIXELS);
 					anim.config = activeAnimations[i].config;
 					anim.id = activeAnimations[i].id;
