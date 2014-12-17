@@ -7,7 +7,7 @@ var http = require('http'),
 
 	spi = require('spi'),
 
-	RPixel = require('raspberrypixels'),
+	RPixel = require('./lib/raspberrypixels'),
 
 	AvailableAnimations = require('./animationloader').load()
 Animations = [];

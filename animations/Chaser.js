@@ -1,7 +1,7 @@
 function Chaser() {
 	this.name = 'Chaser';
 
-	this._gap = 8;
+	this._gap = 5;
 	this._offset = 0;
 
 	this.config = {
@@ -26,22 +26,24 @@ function Chaser() {
 
 Chaser.prototype.requestFrame = function (frame, pixelBuffer) {
 	if(frame % this.config.speed.value === 0) {
-		var pixels = pixelBuffer.buffer.length / 3;
+		var pixelsCount = pixelBuffer.buffer.length / 3,
+			pixelsMap = [];
+
 		if(this._offset++ >= this._gap) {
 			this._offset = 0;
 		}
 
 		pixelBuffer.blank();
 
-		for(var i = 0; i < pixels - this._offset; i++) {
-			if(i % this._gap === 0) {
-				var position = i + this._offset;
-				pixelBuffer.fillRangeRGB(position, position + 1,
-					this.config.color.value.r,
-					this.config.color.value.g,
-					this.config.color.value.b);
-			}
+		for (var i = this._offset; i < pixelsCount; i += this._gap) {
+			pixelsMap[i] = {
+				r: this.config.color.value.r,
+				g: this.config.color.value.g,
+				b: this.config.color.value.b
+			};
 		}
+
+		pixelBuffer.fillMapRGB(pixelsMap);
 	}
 
 	return pixelBuffer
