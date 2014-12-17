@@ -1,6 +1,4 @@
 function Hourglass() {
-	console.log('constructor');
-	console.trace();
 	this.name = 'Hourglass';
 
 	this._currentPosition = 0;
