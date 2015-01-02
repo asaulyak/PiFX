@@ -19,6 +19,8 @@ var PORT = process.env.PORT || 8777;
 var FPS = 30;
 var RUNNING = true;
 
+GLOBAL.PIXELS = PIXELS;
+
 app.listen(parseInt(PORT, 10));
 
 console.log("HTTP server listening on port " + PORT)

@@ -1,6 +1,8 @@
 var tinycolor = require('tinycolor2');
 
 function Fade() {
+	'use strict';
+
 	this.name = 'Fade';
 
 	this._brightness = {
@@ -67,8 +69,6 @@ Fade.prototype.requestFrame = function (frame, pixelBuffer) {
 			this._brightness.direction = -1;
 		}
 
-		console.log('this._brightness', this._brightness.value);
-
 		for(var i = 0; i < pixels; i++) {
 			var color = this._colors[i % this._colors.length],
 				brightness = i % this._colors.length > 1
@@ -79,7 +79,7 @@ Fade.prototype.requestFrame = function (frame, pixelBuffer) {
 		}
 	}
 
-	return pixelBuffer
+	return pixelBuffer;
 };
 
 module.exports = Fade;
